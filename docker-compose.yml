@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  apache:
+    image: bitnami/apache:latest
+    ports:
+    - 8080:8080
+    volumes:
+    - ./app:/app
+    - ./bitnami.conf:/opt/bitnami/apache/conf/bitnami/bitnami.conf
+  apache-exporter:
+    image: bitnami/apache-exporter:latest
+    ports:
+    - 9117:9117
+    command:
+    - --scrape_uri=http://apache:8080/server-status/?auto
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+    - 9090:9090
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
